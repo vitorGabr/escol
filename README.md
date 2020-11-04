@@ -1,6 +1,6 @@
 # escool
 
-A new Flutter project.
+Aplicativo para o sistema de educação.
 
 ## Getting Started
 
