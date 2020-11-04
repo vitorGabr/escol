@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "330501529800",
+    "firebase_url": "https://educational-system-61d77.firebaseio.com",
+    "project_id": "educational-system-61d77",
+    "storage_bucket": "educational-system-61d77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330501529800:android:dfdf86b8d69b04b36845fd",
+        "android_client_info": {
+          "package_name": "com.example.escool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330501529800-pcigqbn8m1biov18kc4r1jmarlggpp2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuNeLYlXuRdUmda99uCTPssfs_RFpPgXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330501529800-pcigqbn8m1biov18kc4r1jmarlggpp2a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
