@@ -3,8 +3,9 @@ import 'package:escol/views/shared/general/theme/colors.dart';
 import 'package:escol/views/shared/general/theme/vars.dart';
 import 'package:flutter/material.dart';
 
-class AulasCard extends StatelessWidget {
+import '../shared/general/theme/colors.dart';
 
+class AulasCard extends StatelessWidget {
   final int idx;
   final AulaModel aula;
 
@@ -36,10 +37,9 @@ class AulasCard extends StatelessWidget {
               child: Text(
                 '${aula.materia.toUpperCase()}',
                 style: TextStyle(
-                  color: secondary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15
-                ),
+                    color: secondary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -55,21 +55,11 @@ class AulasCard extends StatelessWidget {
                   bottomRight: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: primaryshadow,
-                    offset: Offset(0,5),
-                    blurRadius: 4.0
-                  )
-                ]
               ),
               child: Text(
-                '${idx+1}º A',
+                '${idx + 1}º A',
                 style: TextStyle(
-                  color: primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12
-                ),
+                    color: primary, fontWeight: FontWeight.bold, fontSize: 12),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

@@ -6,22 +6,23 @@ import 'package:escol/views/widgets/horarioDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class HorarioCard extends StatelessWidget {
+import '../shared/general/theme/colors.dart';
 
+class HorarioCard extends StatelessWidget {
   final int idx;
   final String materia;
   final List<MateriaModel> listMateria;
   final String prof;
   final MateriaModel materiaCompleta;
-  
-  const HorarioCard({
-    Key key, 
-    @required this.idx, 
-    @required this.materia, 
-    @required this.prof, 
-    @required this.materiaCompleta, 
-    @required this.listMateria
-  }) : super(key: key);
+
+  const HorarioCard(
+      {Key key,
+      @required this.idx,
+      @required this.materia,
+      @required this.prof,
+      @required this.materiaCompleta,
+      @required this.listMateria})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,32 +37,29 @@ class HorarioCard extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: secondaryColor,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: primaryshadow,
-                    offset: Offset(0,4),
-                    blurRadius: 5
-                  )
-                ]
-              ),
+                  color: secondaryColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                        color: primaryshadow,
+                        offset: Offset(0, 4),
+                        blurRadius: 5)
+                  ]),
               child: RaisedButton(
-                onPressed: (){
+                onPressed: () {
                   showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return HorarioDialog(
-                        listMateria: listMateria,
-                        materia: materiaCompleta,
-                        idx: idx,
-                      );
-                  });
+                      context: context,
+                      builder: (BuildContext context) {
+                        return HorarioDialog(
+                          listMateria: listMateria,
+                          materia: materiaCompleta,
+                          idx: idx,
+                        );
+                      });
                 },
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)
-                ),
+                    borderRadius: BorderRadius.circular(12)),
                 color: secondary,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,26 +73,25 @@ class HorarioCard extends StatelessWidget {
                         children: [
                           AutoSizeText(
                             '$idx\º aula',
-                            style: TextStyle(
-                              color: primary,
-                              fontSize: 15
-                            ),
+                            style: TextStyle(color: primary, fontSize: 15),
                           ),
                           Text(
                             '${toBeginningOfSentenceCase(materiaCompleta.nome)}',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
-                              color: primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 26
-                            ),
+                                color: primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 26),
                           ),
                         ],
                       ),
                     ),
                     Container(
-                      child: Icon(Icons.arrow_forward,color: primary,),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: primary,
+                      ),
                     )
                   ],
                 ),
