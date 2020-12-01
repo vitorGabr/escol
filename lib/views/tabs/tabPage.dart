@@ -4,7 +4,6 @@ import 'package:escol/views/horario/horarioPage.dart';
 import 'package:escol/views/moreOption/moreOptionPage.dart';
 import 'package:escol/views/shared/general/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; 
 
 class TabPage extends StatefulWidget {
   @override
@@ -12,7 +11,6 @@ class TabPage extends StatefulWidget {
 }
 
 class _TabPageState extends State<TabPage> {
-
   int _currentIndex = 0;
   void onTapped(int index) {
     setState(() {
@@ -30,7 +28,6 @@ class _TabPageState extends State<TabPage> {
 
   @override
   Widget build(BuildContext context) {
-
     List<BottomNavigationBarItem> _bottomItemsAluno = [
       BottomNavigationBarItem(
           icon: Icon(
@@ -38,15 +35,10 @@ class _TabPageState extends State<TabPage> {
           ),
           label: 'Início'),
       BottomNavigationBarItem(
-          icon: Icon(
-            _currentIndex == 1 ? Icons.watch_later : Icons.schedule
-          ),
+          icon: Icon(_currentIndex == 1 ? Icons.watch_later : Icons.schedule),
           label: 'Horário'),
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.calendar_today
-          ),
-          label: 'Calendário'),
+          icon: Icon(Icons.calendar_today), label: 'Calendário'),
       BottomNavigationBarItem(
           icon: Icon(
             _currentIndex == 3 ? Icons.more_horiz : Icons.more_horiz_outlined,
@@ -59,15 +51,12 @@ class _TabPageState extends State<TabPage> {
         Scaffold(
           body: pagesAluno[_currentIndex],
           bottomNavigationBar: Theme(
-            data: Theme.of(context).copyWith(
-              canvasColor: primary,
-              appBarTheme: AppBarTheme(
-              )
-            ), 
+            data: Theme.of(context)
+                .copyWith(canvasColor: primary, appBarTheme: AppBarTheme()),
             child: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               onTap: onTapped,
-              unselectedIconTheme: IconThemeData(color: secondary),
+              unselectedIconTheme: IconThemeData(color: neutralMid),
               unselectedFontSize: 10,
               selectedFontSize: 10,
               currentIndex: _currentIndex,

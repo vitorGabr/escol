@@ -1,12 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharePreferencesRepository {
-
   static SharePreferencesRepository _instance;
-  
+
   factory SharePreferencesRepository() {
     _instance ??= SharePreferencesRepository._internalConstructor();
-    
+
     return _instance;
   }
 
