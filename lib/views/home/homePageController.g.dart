@@ -9,33 +9,33 @@ part of 'homePageController.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomePageController on _HomePageControllerBase, Store {
-  final _$listMateriasAtom = Atom(name: '_HomePageControllerBase.listMaterias');
+  final _$subjectListsAtom = Atom(name: '_HomePageControllerBase.subjectLists');
 
   @override
-  ObservableFuture<List<MateriaModel>> get listMaterias {
-    _$listMateriasAtom.reportRead();
-    return super.listMaterias;
+  ObservableFuture<List<SubjectModel>> get subjectLists {
+    _$subjectListsAtom.reportRead();
+    return super.subjectLists;
   }
 
   @override
-  set listMaterias(ObservableFuture<List<MateriaModel>> value) {
-    _$listMateriasAtom.reportWrite(value, super.listMaterias, () {
-      super.listMaterias = value;
+  set subjectLists(ObservableFuture<List<SubjectModel>> value) {
+    _$subjectListsAtom.reportWrite(value, super.subjectLists, () {
+      super.subjectLists = value;
     });
   }
 
-  final _$noticiaAtom = Atom(name: '_HomePageControllerBase.noticia');
+  final _$newsAtom = Atom(name: '_HomePageControllerBase.news');
 
   @override
-  ObservableFuture<NoticiaModel> get noticia {
-    _$noticiaAtom.reportRead();
-    return super.noticia;
+  ObservableFuture<NewsModel> get news {
+    _$newsAtom.reportRead();
+    return super.news;
   }
 
   @override
-  set noticia(ObservableFuture<NoticiaModel> value) {
-    _$noticiaAtom.reportWrite(value, super.noticia, () {
-      super.noticia = value;
+  set news(ObservableFuture<NewsModel> value) {
+    _$newsAtom.reportWrite(value, super.news, () {
+      super.news = value;
     });
   }
 
@@ -55,28 +55,28 @@ mixin _$HomePageController on _HomePageControllerBase, Store {
     });
   }
 
-  final _$listAulasAtom = Atom(name: '_HomePageControllerBase.listAulas');
+  final _$classListsAtom = Atom(name: '_HomePageControllerBase.classLists');
 
   @override
-  ObservableFuture<List<AulaModel>> get listAulas {
-    _$listAulasAtom.reportRead();
-    return super.listAulas;
+  ObservableFuture<List<ClassModel>> get classLists {
+    _$classListsAtom.reportRead();
+    return super.classLists;
   }
 
   @override
-  set listAulas(ObservableFuture<List<AulaModel>> value) {
-    _$listAulasAtom.reportWrite(value, super.listAulas, () {
-      super.listAulas = value;
+  set classLists(ObservableFuture<List<ClassModel>> value) {
+    _$classListsAtom.reportWrite(value, super.classLists, () {
+      super.classLists = value;
     });
   }
 
   @override
   String toString() {
     return '''
-listMaterias: ${listMaterias},
-noticia: ${noticia},
+subjectLists: ${subjectLists},
+news: ${news},
 facebookPost: ${facebookPost},
-listAulas: ${listAulas}
+classLists: ${classLists}
     ''';
   }
 }

@@ -1,21 +1,21 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:escol/modules/aluno/models/aulaModel.dart';
-import 'package:escol/modules/aluno/models/enum/daysWeekEnum.dart';
-import 'package:escol/modules/aluno/models/escolaModel.dart';
-import 'package:escol/modules/aluno/models/eventModel/eventoModel.dart';
-import 'package:escol/modules/aluno/models/eventModel/eventosPorMesModel.dart';
-import 'package:escol/modules/aluno/models/eventModel/eventosPorDiaModel.dart';
-import 'package:escol/modules/aluno/models/horarioModel.dart';
-import 'package:escol/modules/aluno/models/informacaoEscolarModel.dart';
-import 'package:escol/modules/aluno/models/materiaModel.dart';
-import 'package:escol/modules/aluno/models/salaModel.dart';
+import 'package:escol/modules/student/models/classModel.dart';
+import 'package:escol/modules/student/models/enum/daysWeekEnum.dart';
+import 'package:escol/modules/student/models/schoolModel.dart';
+import 'package:escol/modules/student/models/eventModel/eventModel.dart';
+import 'package:escol/modules/student/models/eventModel/eventosMonthModel.dart';
+import 'package:escol/modules/student/models/eventModel/eventDayModel.dart';
+import 'package:escol/modules/student/models/scheduleModel.dart';
+import 'package:escol/modules/student/models/schoolInformationModel.dart';
+import 'package:escol/modules/student/models/subjectModel.dart';
+import 'package:escol/modules/student/models/classroomModel.dart';
 import 'package:escol/modules/firebase/models/enum/typeUserEnum.dart';
 import 'package:escol/modules/firebase/models/firebaseUserModel.dart';
 import 'package:escol/modules/firebase/providers/firestoreInstanceProvider.dart';
-import 'package:escol/modules/noticias/models/enum/categoriaEnum.dart';
-import 'package:escol/modules/noticias/models/noticiaModel.dart';
+import 'package:escol/modules/news/models/enum/categoriaEnum.dart';
+import 'package:escol/modules/news/models/newsModel.dart';
 import 'package:escol/modules/shared/repositories/sharePreferencesRepository.dart';
 import 'package:escol/modules/shared/getItRepository.dart';
 import 'package:escol/modules/shared/models/responseDefaultModel.dart';
@@ -27,9 +27,9 @@ class FirebaseFirestoreRepository {
 
   final FirestoreInstanceProvider _instance = FirestoreInstanceProvider();
 
-  Future<List<MateriaModel>> getMaterias(String _uid) async {
-    List<MateriaModel> _listMateria = [];
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<List<SubjectModel>> getSubjects(String _uid) async {
+    List<SubjectModel> _subjectList = [];
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -37,28 +37,28 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.sala
+      _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+      await _schoolInformation.classroom
           .collection('materias')
           .get()
           .then((snapshots) async {
         await Future.forEach(snapshots.docs, (snapshot) async {
-          MateriaModel _materia = MateriaModel.fromJson(snapshot.data());
-          var _professor = _materia.professor;
-          var _referencia = await _materia.referencia.get();
-          _materia = MateriaModel.fromJson(_referencia.data());
-          _materia.professor = _professor;
-          _listMateria.add(_materia);
+          SubjectModel _subject = SubjectModel.fromJson(snapshot.data());
+          var _teacher = _subject.teacher;
+          var _referencia = await _subject.reference.get();
+          _subject = SubjectModel.fromJson(_referencia.data());
+          _subject.teacher = _teacher;
+          _subjectList.add(_subject);
         });
       });
     });
 
-    return _listMateria;
+    return _subjectList;
   }
 
-  Future<List<AulaModel>> getAulas(String _uid) async {
-    var _listAulas = List<AulaModel>();
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<List<ClassModel>> getClasses(String _uid) async {
+    var _classList = List<ClassModel>();
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -66,29 +66,26 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.sala
+      _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+      await _schoolInformation.classroom
           .collection('aulas')
           .doc('aula')
           .get()
           .then((snapshots) async {
-        AulaModel _aula;
-        snapshots
-            .data()['${DaysWeekEnum.segunda_feira.index}']
-            .forEach((_onValue) {
+        ClassModel _class;
+        snapshots.data()['${DaysWeekEnum.monday.index}'].forEach((_onValue) {
           Map<String, dynamic> _json = _onValue;
-          _aula = AulaModel.fromJson(_json);
-          _listAulas.add(_aula);
+          _class = ClassModel.fromJson(_json);
+          _classList.add(_class);
         });
       });
     });
 
-    return _listAulas;
+    return _classList;
   }
 
   Future<ResponseDefaultModel<FirebaseUserModel>> getUser(String _uid) async {
     var _result = ResponseDefaultModel<FirebaseUserModel>()..isSuccess = false;
-
     try {
       await _instance.firestore
           .collection('usuarios')
@@ -139,9 +136,9 @@ class FirebaseFirestoreRepository {
     } catch (_) {}
   }
 
-  Future<List<HorarioModel>> getHorario(String _uid) async {
-    var _listHorarios = List<HorarioModel>();
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<List<ScheduleModel>> getSchedule(String _uid) async {
+    var _scheduleList = List<ScheduleModel>();
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -149,42 +146,42 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.sala
+      _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+      await _schoolInformation.classroom
           .collection('aulas')
           .doc('aula')
           .get()
           .then((snapshots) async {
-        List<AulaModel> _listAulas;
-        HorarioModel _horario;
-        snapshots.data().forEach((_dia, _aulas) {
-          _listAulas = [];
+        List<ClassModel> _classList;
+        ScheduleModel _schedule;
+        snapshots.data().forEach((_day, _aulas) {
+          _classList = [];
           _aulas.forEach((_aula) {
-            _listAulas.add(AulaModel.fromJson(_aula));
+            _classList.add(ClassModel.fromJson(_aula));
           });
-          _horario = HorarioModel()
-            ..aulas = _listAulas
-            ..diaDaSemana = int.parse(_dia);
-          _listHorarios.add(_horario);
+          _schedule = ScheduleModel()
+            ..classes = _classList
+            ..weekDay = int.parse(_day);
+          _scheduleList.add(_schedule);
         });
       });
     });
 
-    return _listHorarios;
+    return _scheduleList;
   }
 
-  Future<ResponseDefaultModel> saveHorario(
-      String _uid, List<HorarioModel> _list) async {
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<ResponseDefaultModel> saveSchedule(
+      String _uid, List<ScheduleModel> _list) async {
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     var _result = ResponseDefaultModel();
     _result.isSuccess = false;
     Map<String, dynamic> _json = {};
-    _list.forEach((_horario) {
-      var _listAulaModel = [];
-      _horario.aulas.forEach((element) {
-        _listAulaModel.add(element.toJson());
+    _list.forEach((_schedule) {
+      var _classListModel = [];
+      _schedule.classes.forEach((element) {
+        _classListModel.add(element.toJson());
       });
-      _json[(_list.indexOf(_horario).toString())] = _listAulaModel;
+      _json[(_list.indexOf(_schedule).toString())] = _classListModel;
     });
     try {
       await _instance.firestore
@@ -194,8 +191,8 @@ class FirebaseFirestoreRepository {
           .doc('informacao')
           .get()
           .then((_result) async {
-        _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-        await _informacaoEscolar.sala
+        _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+        await _schoolInformation.classroom
             .collection('aulas')
             .doc('aula')
             .set(_json);
@@ -208,11 +205,11 @@ class FirebaseFirestoreRepository {
     return _result;
   }
 
-  Future<List<EventosPorMesModel>> getListEventos(String _uid) async {
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
-    var listEventos = List<EventoModel>();
-    var listEventosPorDia = List<EventosPorDiaModel>();
-    var listEventosPorMes = List<EventosPorMesModel>();
+  Future<List<EventMonthModel>> getEventList(String _uid) async {
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
+    var _eventTotalList = List<EventModel>();
+    var _eventDayList = List<EventDayModel>();
+    var _eventMonthList = List<EventMonthModel>();
     DocumentReference _documentReference =
         _instance.firestore.collection('usuarios').doc(_uid);
 
@@ -221,53 +218,53 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((snapshots) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(snapshots.data());
-      await _informacaoEscolar.sala
+      _schoolInformation = SchoolInformationModel.fromJson(snapshots.data());
+      await _schoolInformation.classroom
           .collection('calendario')
           .orderBy('data', descending: false)
           .get()
           .then((_result) {
         _result.docs.forEach((_value) {
-          listEventos.add(EventoModel.fromJson(_value.data()));
+          _eventTotalList.add(EventModel.fromJson(_value.data()));
         });
-        listEventos
-            .map((_evento) => _evento.data.month)
+        _eventTotalList
+            .map((_evento) => _evento.date.month)
             .toSet()
             .forEach((_evento) async {
-          listEventosPorDia = [];
-          listEventos
-              .where((a) => a.data.month == _evento)
-              .forEach((EventoModel _onValue) {
-            if (listEventosPorDia.indexWhere(
-                    (listEvento) => listEvento.dia.day == _onValue.data.day) !=
+          _eventDayList = [];
+          _eventTotalList
+              .where((a) => a.date.month == _evento)
+              .forEach((EventModel _onValue) {
+            if (_eventDayList.indexWhere(
+                    (listEvento) => listEvento.day.day == _onValue.date.day) !=
                 -1) {
-              listEventosPorDia
+              _eventDayList
                   .where(
-                      (listEvento) => listEvento.dia.day == _onValue.data.day)
+                      (listEvento) => listEvento.day.day == _onValue.date.day)
                   .first
-                ..dia = _onValue.data
-                ..eventos.add(_onValue);
+                ..day = _onValue.date
+                ..events.add(_onValue);
             } else {
-              EventosPorDiaModel _eventosDiaModel = EventosPorDiaModel()
-                ..dia = _onValue.data
-                ..eventos = [_onValue];
-              listEventosPorDia.add(_eventosDiaModel);
+              EventDayModel _eventosdayModel = EventDayModel()
+                ..day = _onValue.date
+                ..events = [_onValue];
+              _eventDayList.add(_eventosdayModel);
             }
           });
-          EventosPorMesModel _listAgendamentoMes = EventosPorMesModel()
-            ..eventos = listEventosPorDia
-            ..mes = DateTime(DateTime.now().year, _evento);
-          listEventosPorMes.add(_listAgendamentoMes);
+          EventMonthModel _listAgendamentoMes = EventMonthModel()
+            ..events = _eventDayList
+            ..month = DateTime(DateTime.now().year, _evento);
+          _eventMonthList.add(_listAgendamentoMes);
         });
       });
     });
 
-    return listEventosPorMes.toList();
+    return _eventMonthList.toList();
   }
 
-  Future<SalaModel> getInfoSala(String _uid) async {
-    var _sala = SalaModel();
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<ClassroomModel> getClassInfo(String _uid) async {
+    var _class = ClassroomModel();
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -275,19 +272,19 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.sala.get().then((snapshots) async {
+      _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+      await _schoolInformation.classroom.get().then((snapshots) async {
         print(snapshots.data());
-        _sala = SalaModel.fromJson(snapshots.data());
+        _class = ClassroomModel.fromJson(snapshots.data());
       });
     });
 
-    return _sala;
+    return _class;
   }
 
-  Future<EscolaModel> getInfoEscola(String _uid) async {
-    var _sala = EscolaModel();
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<SchoolModel> getSchoolInfo(String _uid) async {
+    var _school = SchoolModel();
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -295,19 +292,17 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.escola.get().then((snapshots) async {
-        print(snapshots.data());
-        _sala = EscolaModel.fromJson(snapshots.data());
+      _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+      await _schoolInformation.school.get().then((snapshots) async {
+        _school = SchoolModel.fromJson(snapshots.data());
       });
     });
 
-    return _sala;
+    return _school;
   }
 
-  Future<ResponseDefaultModel> saveEvento(
-      String _uid, EventoModel _evento) async {
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<ResponseDefaultModel> saveEvent(String _uid, EventModel _event) async {
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     var _result = ResponseDefaultModel();
     _result.isSuccess = false;
     try {
@@ -318,11 +313,11 @@ class FirebaseFirestoreRepository {
           .doc('informacao')
           .get()
           .then((_result) async {
-        _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-        await _informacaoEscolar.sala
+        _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+        await _schoolInformation.classroom
             .collection('calendario')
             .doc()
-            .set(_evento.toJson());
+            .set(_event.toJson());
       });
       _result.isSuccess = true;
     } catch (e) {
@@ -332,10 +327,9 @@ class FirebaseFirestoreRepository {
     return _result;
   }
 
-  Future<List<NoticiaModel>> getNoticias(String _uid,
-      {String params = ''}) async {
-    var _list = List<NoticiaModel>();
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<List<NewsModel>> getNews(String _uid, {String params = ''}) async {
+    var _newsList = List<NewsModel>();
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -343,34 +337,34 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.sala
-          .collection('noticias')
+      _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+      await _schoolInformation.classroom
+          .collection('news')
           .where('$params')
-          .orderBy('data', descending: true)
+          .orderBy('date', descending: true)
           .get()
           .then((snapshots) async {
         snapshots.docs.forEach((_onValue) {
-          _list.add(NoticiaModel.fromJson(_onValue.data()));
+          _newsList.add(NewsModel.fromJson(_onValue.data()));
         });
       });
-      await _informacaoEscolar.escola
-          .collection('noticias')
+      await _schoolInformation.school
+          .collection('news')
           .where('$params')
-          .orderBy('data', descending: true)
+          .orderBy('date', descending: true)
           .get()
           .then((snapshots) async {
         snapshots.docs.forEach((_onValue) {
-          _list.add(NoticiaModel.fromJson(_onValue.data()));
+          _newsList.add(NewsModel.fromJson(_onValue.data()));
         });
       });
     });
-    return _list;
+    return _newsList;
   }
 
-  Future<NoticiaModel> getLastNoticia(String _uid) async {
-    var _noticia = NoticiaModel();
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+  Future<NewsModel> getLastNews(String _uid) async {
+    var _lastNews = NewsModel();
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -378,33 +372,33 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.escola
+      _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+      await _schoolInformation.school
           .collection('noticias')
           .orderBy('data', descending: true)
           .limit(1)
           .get()
           .then((snapshots) async {
         snapshots.docs.forEach((_onValue) {
-          _noticia = NoticiaModel.fromJson(_onValue.data());
+          _lastNews = NewsModel.fromJson(_onValue.data());
         });
       });
     });
-    return _noticia;
+    return _lastNews;
   }
 
   Future<void> setIntoFirebase(String _uid) async {
-    var _noticia = NoticiaModel()
+    var _noticia = NewsModel()
       ..data = DateTime.now()
-      ..imagem =
-          'https://firebasestorage.googleapis.com/v0/b/educational-system-61d77.appspot.com/o/escolas%2F%20WVo4wgMvXQrjNaUTlC8S%2Fnoticias%2Fescolas5.jpg?alt=media&token=56a12cf4-1d00-482e-8e45-2cdde18c5ba9'
-      ..usuario = _instance.firestore.collection('usuarios').doc(_uid)
-      ..usuarioImage =
+      ..image =
+          'https://firebasestorage.googleapis.com/v0/b/educational-system-61d77.appspot.com/o/escolas%2F%20WVo4wgMvXQrjNaUTlC8S%2Fnews%2Fescolas5.jpg?alt=meday&token=56a12cf4-1d00-482e-8e45-2cdde18c5ba9'
+      ..user = _instance.firestore.collection('usuarios').doc(_uid)
+      ..userImage =
           'https://ofuxiqueiro.com.br/wp-content/uploads/2020/03/image-8.jpeg'
-      ..usuarioNome = 'João da silva'
-      ..categorias = [CategoriaEnum.sala.index];
+      ..userName = 'João da silva'
+      ..category = [CategoriaEnum.classroom.index];
 
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+    SchoolInformationModel _informacaoEscolar = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -412,9 +406,9 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.sala
-          .collection('noticias')
+      _informacaoEscolar = SchoolInformationModel.fromJson(_result.data());
+      await _informacaoEscolar.classroom
+          .collection('news')
           .doc()
           .set(_noticia.toJson());
     });
@@ -423,7 +417,7 @@ class FirebaseFirestoreRepository {
   Future<List<FirebaseUserModel>> searchUsers(
       String _uid, String _params) async {
     var _users = List<FirebaseUserModel>();
-    InformacaoEscolarModel _informacaoEscolar = InformacaoEscolarModel();
+    SchoolInformationModel _schoolInformation = SchoolInformationModel();
     await _instance.firestore
         .collection('usuarios')
         .doc(_uid)
@@ -431,8 +425,8 @@ class FirebaseFirestoreRepository {
         .doc('informacao')
         .get()
         .then((_result) async {
-      _informacaoEscolar = InformacaoEscolarModel.fromJson(_result.data());
-      await _informacaoEscolar.escola
+      _schoolInformation = SchoolInformationModel.fromJson(_result.data());
+      await _schoolInformation.school
           .collection('usuarios')
           .orderBy('displayNameLower')
           .startAt([_params])
@@ -440,7 +434,7 @@ class FirebaseFirestoreRepository {
           .get()
           .then((snapshots) async {
             await Future.forEach(snapshots.docs, (_onValue) async {
-              var _user = FirebaseUserModel.fromJson(_onValue.data());
+              var _user = FirebaseUserModel.fromJson(_onValue.date());
               var _result = await _user.reference.get();
               _users.add(FirebaseUserModel.fromJson(_result.data()));
             });

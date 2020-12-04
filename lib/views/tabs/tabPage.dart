@@ -1,6 +1,6 @@
 import 'package:escol/views/calendar/calendarPage.dart';
 import 'package:escol/views/home/homePage.dart';
-import 'package:escol/views/horario/horarioPage.dart';
+import 'package:escol/views/schedule/schedulePage.dart';
 import 'package:escol/views/moreOption/moreOptionPage.dart';
 import 'package:escol/views/shared/general/theme/colors.dart';
 import 'package:flutter/material.dart';

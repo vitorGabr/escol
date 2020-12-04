@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:escol/modules/aluno/models/eventModel/eventosPorDiaModel.dart';
-import 'package:escol/modules/aluno/models/eventModel/eventosPorMesModel.dart';
+import 'package:escol/modules/student/models/eventModel/eventDayModel.dart';
+import 'package:escol/modules/student/models/eventModel/eventosMonthModel.dart';
 import 'package:escol/modules/firebase/repositories/firebaseFirestoreRepository.dart';
 import 'package:mobx/mobx.dart';
 part 'calendarPageController.g.dart';
@@ -11,40 +11,40 @@ class CalendarPageController = _CalendarPageControllerBase
 
 abstract class _CalendarPageControllerBase with Store {
   _CalendarPageControllerBase(String _uid) {
-    getListEventos(_uid);
+    getEventList(_uid);
   }
 
   final FirebaseFirestoreRepository _firestoreRepository =
       FirebaseFirestoreRepository();
 
   @observable
-  ObservableFuture<List<EventosPorMesModel>> listEventos;
+  ObservableFuture<List<EventMonthModel>> eventList;
 
   @observable
-  Map<DateTime, List<dynamic>> calendarEvents = {};
+  Map<DateTime, List<dynamic>> selectedEvents = {};
 
   @action
   void transformInEvents() {
-    listEventos.value.forEach((_result) {
-      _result.eventos.forEach((_value) {
-        calendarEvents[_value.dia] = _value.eventos;
+    eventList.value.forEach((_result) {
+      _result.events.forEach((_value) {
+        selectedEvents[_value.day] = _value.events;
       });
     });
   }
 
-  void getListEventos(String _uid) {
-    listEventos = _firestoreRepository.getListEventos(_uid).asObservable();
+  void getEventList(String _uid) {
+    eventList = _firestoreRepository.getEventList(_uid).asObservable();
   }
 
-  void filterEvents(DateTime _newDate, List _newListEventos) {
-    var _completer = Completer<List<EventosPorMesModel>>();
-    var filteredEventsDia = EventosPorDiaModel()
-      ..dia = _newDate
-      ..eventos = _newListEventos.isEmpty ? [] : _newListEventos;
-    var filteredEventsMes = EventosPorMesModel()
-      ..mes = _newDate
-      ..eventos = [filteredEventsDia];
-    listEventos = _completer.future.asObservable();
+  void filterEvents(DateTime _newDate, List _neweventList) {
+    var _completer = Completer<List<EventMonthModel>>();
+    var filteredEventsDia = EventDayModel()
+      ..day = _newDate
+      ..events = _neweventList.isEmpty ? [] : _neweventList;
+    var filteredEventsMes = EventMonthModel()
+      ..month = _newDate
+      ..events = [filteredEventsDia];
+    eventList = _completer.future.asObservable();
     _completer.complete([filteredEventsMes]);
   }
 
