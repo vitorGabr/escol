@@ -1,8 +1,8 @@
 import 'package:escol/modules/firebase/models/firebaseUserModel.dart';
 import 'package:escol/modules/shared/getItRepository.dart';
-import 'package:escol/views/configuracao/configuracaoPage.dart';
-import 'package:escol/views/noticias/noticiasPage.dart';
-import 'package:escol/views/perfil/perfilPage.dart';
+import 'package:escol/views/configuration/configurationPage.dart';
+import 'package:escol/views/news/newsPage.dart';
+import 'package:escol/views/profile/profilePage.dart';
 import 'package:escol/views/shared/general/theme/colors.dart';
 import 'package:escol/views/shared/general/theme/vars.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class _MoreOptionPageState extends State<MoreOptionPage> {
                 padding: EdgeInsets.zero,
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PerfilPage()));
+                      MaterialPageRoute(builder: (context) => ProfilePage()));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,15 +94,15 @@ class _MoreOptionPageState extends State<MoreOptionPage> {
             SizedBox(
               height: _ac.rHP(2),
             ),
-            _menuItem(Icons.notes_outlined, 'Boletim', NoticiasPage()),
-            _menuItem(Icons.check, 'Presença', NoticiasPage()),
+            _menuItem(Icons.notes_outlined, 'Boletim', NewsPage()),
+            _menuItem(Icons.check, 'Presença', NewsPage()),
             _menuItem(Icons.search_outlined, 'Pesquise pelo seu professor',
-                NoticiasPage()),
-            _menuItem(Icons.public_outlined, 'Noticias', NoticiasPage()),
-            _menuItem(Icons.book_outlined, 'Biblioteca', NoticiasPage()),
-            _menuItem(Icons.restaurant_outlined, 'Cantina', NoticiasPage()),
+                NewsPage()),
+            _menuItem(Icons.public_outlined, 'Noticias', NewsPage()),
+            _menuItem(Icons.book_outlined, 'Biblioteca', NewsPage()),
+            _menuItem(Icons.restaurant_outlined, 'Cantina', NewsPage()),
             _menuItem(
-                Icons.settings_outlined, 'Configuraçâo', ConfiguracaoPage()),
+                Icons.settings_outlined, 'Configuraçâo', ConfigurationPage()),
           ],
         ),
       );

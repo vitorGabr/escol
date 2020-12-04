@@ -12,13 +12,13 @@ mixin _$CalendarModalController on _CalendarModalControllerBase, Store {
   final _$salaAtom = Atom(name: '_CalendarModalControllerBase.sala');
 
   @override
-  ObservableFuture<SalaModel> get sala {
+  ObservableFuture<ClassroomModel> get sala {
     _$salaAtom.reportRead();
     return super.sala;
   }
 
   @override
-  set sala(ObservableFuture<SalaModel> value) {
+  set sala(ObservableFuture<ClassroomModel> value) {
     _$salaAtom.reportWrite(value, super.sala, () {
       super.sala = value;
     });
@@ -27,13 +27,13 @@ mixin _$CalendarModalController on _CalendarModalControllerBase, Store {
   final _$materiasAtom = Atom(name: '_CalendarModalControllerBase.materias');
 
   @override
-  ObservableFuture<List<MateriaModel>> get materias {
+  ObservableFuture<List<SubjectModel>> get materias {
     _$materiasAtom.reportRead();
     return super.materias;
   }
 
   @override
-  set materias(ObservableFuture<List<MateriaModel>> value) {
+  set materias(ObservableFuture<List<SubjectModel>> value) {
     _$materiasAtom.reportWrite(value, super.materias, () {
       super.materias = value;
     });

@@ -1,7 +1,7 @@
-import 'package:escol/modules/aluno/models/aulaModel.dart';
-import 'package:escol/modules/aluno/models/materiaModel.dart';
+import 'package:escol/modules/student/models/classModel.dart';
+import 'package:escol/modules/student/models/subjectModel.dart';
 import 'package:escol/modules/firebase/repositories/firebaseFirestoreRepository.dart';
-import 'package:escol/modules/noticias/models/noticiaModel.dart';
+import 'package:escol/modules/news/models/newsModel.dart';
 import 'package:escol/modules/shared/models/facebookModel.dart';
 import 'package:escol/modules/shared/models/responseDefaultModel.dart';
 import 'package:escol/modules/shared/repositories/facebookRepository.dart';
@@ -17,29 +17,29 @@ abstract class _HomePageControllerBase with Store {
       FirebaseFirestoreRepository();
 
   _HomePageControllerBase(String _uid) {
-    getMaterias(_uid);
-    getAulas(_uid);
-    getNoticias(_uid);
+    getSubjects(_uid);
+    getClasses(_uid);
+    getNews(_uid);
   }
 
   @observable
-  ObservableFuture<List<MateriaModel>> listMaterias;
+  ObservableFuture<List<SubjectModel>> subjectLists;
 
   @observable
-  ObservableFuture<NoticiaModel> noticia;
+  ObservableFuture<NewsModel> news;
 
   @observable
   ObservableFuture<ResponseDefaultModel<FacebookModel>> facebookPost;
 
   @observable
-  ObservableFuture<List<AulaModel>> listAulas;
+  ObservableFuture<List<ClassModel>> classLists;
 
-  void getMaterias(String _uid) {
-    listMaterias = _firestoreRepository.getMaterias(_uid).asObservable();
+  void getSubjects(String _uid) {
+    subjectLists = _firestoreRepository.getSubjects(_uid).asObservable();
   }
 
-  void getAulas(String _uid) {
-    listAulas = _firestoreRepository.getAulas(_uid).asObservable();
+  void getClasses(String _uid) {
+    classLists = _firestoreRepository.getClasses(_uid).asObservable();
   }
 
   void getFacebookPost() {
@@ -49,8 +49,8 @@ abstract class _HomePageControllerBase with Store {
         .asObservable();
   }
 
-  void getNoticias(String _uid) {
-    noticia = _firestoreRepository.getLastNoticia(_uid).asObservable();
+  void getNews(String _uid) {
+    news = _firestoreRepository.getLastNews(_uid).asObservable();
   }
 
   String getDate() {

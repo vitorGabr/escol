@@ -9,35 +9,34 @@ part of 'calendarPageController.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$CalendarPageController on _CalendarPageControllerBase, Store {
-  final _$listEventosAtom =
-      Atom(name: '_CalendarPageControllerBase.listEventos');
+  final _$eventListAtom = Atom(name: '_CalendarPageControllerBase.eventList');
 
   @override
-  ObservableFuture<List<EventosPorMesModel>> get listEventos {
-    _$listEventosAtom.reportRead();
-    return super.listEventos;
+  ObservableFuture<List<EventMonthModel>> get eventList {
+    _$eventListAtom.reportRead();
+    return super.eventList;
   }
 
   @override
-  set listEventos(ObservableFuture<List<EventosPorMesModel>> value) {
-    _$listEventosAtom.reportWrite(value, super.listEventos, () {
-      super.listEventos = value;
+  set eventList(ObservableFuture<List<EventMonthModel>> value) {
+    _$eventListAtom.reportWrite(value, super.eventList, () {
+      super.eventList = value;
     });
   }
 
-  final _$calendarEventsAtom =
-      Atom(name: '_CalendarPageControllerBase.calendarEvents');
+  final _$selectedEventsAtom =
+      Atom(name: '_CalendarPageControllerBase.selectedEvents');
 
   @override
-  Map<DateTime, List<dynamic>> get calendarEvents {
-    _$calendarEventsAtom.reportRead();
-    return super.calendarEvents;
+  Map<DateTime, List<dynamic>> get selectedEvents {
+    _$selectedEventsAtom.reportRead();
+    return super.selectedEvents;
   }
 
   @override
-  set calendarEvents(Map<DateTime, List<dynamic>> value) {
-    _$calendarEventsAtom.reportWrite(value, super.calendarEvents, () {
-      super.calendarEvents = value;
+  set selectedEvents(Map<DateTime, List<dynamic>> value) {
+    _$selectedEventsAtom.reportWrite(value, super.selectedEvents, () {
+      super.selectedEvents = value;
     });
   }
 
@@ -58,8 +57,8 @@ mixin _$CalendarPageController on _CalendarPageControllerBase, Store {
   @override
   String toString() {
     return '''
-listEventos: ${listEventos},
-calendarEvents: ${calendarEvents}
+eventList: ${eventList},
+selectedEvents: ${selectedEvents}
     ''';
   }
 }

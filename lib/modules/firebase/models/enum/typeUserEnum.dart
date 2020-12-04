@@ -1,6 +1,6 @@
-enum TypeUserEnum { aluno, professor }
+enum TypeUserEnum { student, teacher }
 
 const Map<TypeUserEnum, String> GetNameTypeUserEnum = {
-  TypeUserEnum.aluno: "Aluno",
-  TypeUserEnum.professor: "Professor"
+  TypeUserEnum.student: "student",
+  TypeUserEnum.teacher: "Professor"
 };

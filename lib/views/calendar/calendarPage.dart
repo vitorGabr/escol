@@ -1,5 +1,5 @@
-import 'package:escol/modules/aluno/models/eventModel/eventosPorDiaModel.dart';
-import 'package:escol/modules/aluno/models/eventModel/eventosPorMesModel.dart';
+import 'package:escol/modules/student/models/eventModel/eventDayModel.dart';
+import 'package:escol/modules/student/models/eventModel/eventosMonthModel.dart';
 import 'package:escol/modules/firebase/models/firebaseUserModel.dart';
 import 'package:escol/modules/shared/getItRepository.dart';
 import 'package:escol/views/calendar/calendarPageController.dart';
@@ -7,7 +7,7 @@ import 'package:escol/views/calendar/modal/calendarModal.dart';
 import 'package:escol/views/shared/circularIndicator/circularIndicator.dart';
 import 'package:escol/views/shared/general/theme/colors.dart';
 import 'package:escol/views/shared/general/theme/vars.dart';
-import 'package:escol/views/widgets/eventosCard.dart';
+import 'package:escol/views/widgets/eventCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -64,10 +64,10 @@ class _CalendarPageState extends State<CalendarPage> {
         elevation: 4.0,
       ),
       body: Observer(builder: (_) {
-        if (_controller.listEventos.status == FutureStatus.pending) {
+        if (_controller.eventList.status == FutureStatus.pending) {
           return CircularIndicator();
         }
-        if (_controller.listEventos.status == FutureStatus.fulfilled) {
+        if (_controller.eventList.status == FutureStatus.fulfilled) {
           _controller.transformInEvents();
           return _body();
         }
@@ -80,7 +80,7 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Column(
           children: [
             TableCalendar(
-              events: _controller.calendarEvents,
+              events: _controller.selectedEvents,
               locale: 'pt_BR',
               availableGestures: AvailableGestures.horizontalSwipe,
               calendarController: _calendarController,
@@ -101,8 +101,8 @@ class _CalendarPageState extends State<CalendarPage> {
                     TextStyle(color: secondary, fontWeight: FontWeight.bold),
                 outsideDaysVisible: true,
               ),
-              onDaySelected: (DateTime _date, List _listEventos, List list) {
-                _controller.filterEvents(_date, _listEventos);
+              onDaySelected: (DateTime _date, List _event, List list) {
+                _controller.filterEvents(_date, _event);
               },
               headerStyle: HeaderStyle(
                 titleTextBuilder: (date, text) =>
@@ -123,15 +123,15 @@ class _CalendarPageState extends State<CalendarPage> {
                   child: ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: _controller.listEventos.value.length,
+                      itemCount: _controller.eventList.value.length,
                       itemBuilder: (ctx, idx) {
-                        EventosPorMesModel _listEventos =
-                            _controller.listEventos.value[idx];
+                        EventMonthModel _event =
+                            _controller.eventList.value[idx];
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${_monthFormat.format(_listEventos.mes).toUpperCase()}',
+                              '${_monthFormat.format(_event.month).toUpperCase()}',
                               style: TextStyle(
                                 color: neutralDarker,
                                 fontWeight: FontWeight.bold,
@@ -143,22 +143,21 @@ class _CalendarPageState extends State<CalendarPage> {
                                 physics: NeverScrollableScrollPhysics(),
                                 padding: EdgeInsets.only(
                                     bottom: _ac.rHP(3), top: _ac.rHP(1)),
-                                itemCount: _listEventos.eventos.length,
+                                itemCount: _event.events.length,
                                 itemBuilder: (ctx, idx) {
-                                  EventosPorDiaModel _evento =
-                                      _listEventos.eventos[idx];
+                                  EventDayModel _evento = _event.events[idx];
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${_dayFormat.format(_evento.dia).toUpperCase()}',
+                                        '${_dayFormat.format(_evento.day).toUpperCase()}',
                                         style: TextStyle(
                                             color: secondary,
                                             fontSize: 13,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      _evento.eventos.isNotEmpty
+                                      _evento.events.isNotEmpty
                                           ? ListView.builder(
                                               shrinkWrap: true,
                                               padding: EdgeInsets.symmetric(
@@ -166,14 +165,14 @@ class _CalendarPageState extends State<CalendarPage> {
                                               ),
                                               physics:
                                                   NeverScrollableScrollPhysics(),
-                                              itemCount: _evento.eventos.length,
+                                              itemCount: _evento.events.length,
                                               itemBuilder: (ctx, idx) {
                                                 var _agendamento =
-                                                    _evento.eventos[idx];
-                                                return EventoCard(
+                                                    _evento.events[idx];
+                                                return EventCard(
                                                   time: _controller
-                                                      .formatTime(_evento.dia),
-                                                  evento: _agendamento,
+                                                      .formatTime(_evento.day),
+                                                  event: _agendamento,
                                                 );
                                               })
                                           : Container(
@@ -205,7 +204,7 @@ class _CalendarPageState extends State<CalendarPage> {
           builder: (context) => CalendarModal(),
         ));
     if (_result != null) {
-      _controller.getListEventos(_user.uid);
+      _controller.getEventList(_user.uid);
     }
   }
 }

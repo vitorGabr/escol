@@ -1,16 +1,15 @@
 import 'package:escol/modules/firebase/models/firebaseUserModel.dart';
 import 'package:escol/modules/shared/getItRepository.dart';
-import 'package:escol/views/configuracao/configuracaoPage.dart';
 import 'package:escol/views/home/homePageController.dart';
-import 'package:escol/views/perfil/perfilPage.dart';
-import 'package:escol/views/pesquisa/PesquisaPage.dart';
+import 'package:escol/views/search/searchPage.dart';
+import 'package:escol/views/profile/profilePage.dart';
 import 'package:escol/views/shared/general/theme/colors.dart';
 import 'package:escol/views/shared/general/theme/vars.dart';
 import 'package:escol/views/widgets/HomePageLoading.dart';
-import 'package:escol/views/widgets/aulasCard.dart';
+import 'package:escol/views/widgets/classesCard.dart';
 import 'package:escol/views/widgets/cachedImageNetwork.dart';
-import 'package:escol/views/widgets/materiaCard.dart';
-import 'package:escol/views/widgets/ultimoPostCard.dart';
+import 'package:escol/views/widgets/subjectCard.dart';
+import 'package:escol/views/widgets/postCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -91,11 +90,11 @@ class _HomePageState extends State<HomePage> {
                   vertical: _ac.rHP(1), horizontal: _ac.rWP(3)),
               scrollDirection: Axis.horizontal,
               itemBuilder: (ctx, idx) {
-                return MateriaCard(
-                  materia: _controller.listMaterias.value[idx],
+                return SubjectCard(
+                  subject: _controller.subjectLists.value[idx],
                 );
               },
-              itemCount: _controller.listMaterias.value.length,
+              itemCount: _controller.subjectLists.value.length,
             ),
           ),
           Container(
@@ -132,13 +131,13 @@ class _HomePageState extends State<HomePage> {
                   vertical: _ac.rHP(1), horizontal: _ac.rWP(3)),
               scrollDirection: Axis.horizontal,
               itemBuilder: (ctx, idx) {
-                var _aula = _controller.listAulas.value[idx];
-                return AulasCard(
+                var _aula = _controller.classLists.value[idx];
+                return ClassCard(
                   idx: idx,
-                  aula: _aula,
+                  classes: _aula,
                 );
               },
-              itemCount: _controller.listAulas.value.length,
+              itemCount: _controller.classLists.value.length,
             ),
           ),
           Container(
@@ -153,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20),
               )),
-          UltimoPostCard(noticia: _controller.noticia.value),
+          PostCard(news: _controller.news.value),
         ],
       );
 
@@ -208,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PerfilPage()));
+                                    builder: (context) => ProfilePage()));
                           }),
                     )
                   ],
@@ -216,14 +215,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Observer(builder: (_) {
-              if (_controller.listMaterias.status == FutureStatus.pending ||
-                  _controller.noticia.status == FutureStatus.pending ||
-                  _controller.listAulas.status == FutureStatus.pending) {
+              if (_controller.subjectLists.status == FutureStatus.pending ||
+                  _controller.news.status == FutureStatus.pending ||
+                  _controller.classLists.status == FutureStatus.pending) {
                 return HomePageLoading();
               }
-              if (_controller.listMaterias.status == FutureStatus.fulfilled &&
-                  _controller.noticia.status == FutureStatus.fulfilled &&
-                  _controller.listAulas.status == FutureStatus.fulfilled) {
+              if (_controller.subjectLists.status == FutureStatus.fulfilled &&
+                  _controller.news.status == FutureStatus.fulfilled &&
+                  _controller.classLists.status == FutureStatus.fulfilled) {
                 return _bodyContent();
               }
               return Container();

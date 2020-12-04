@@ -1,5 +1,5 @@
-import 'package:escol/modules/aluno/models/eventModel/eventoModel.dart';
-import 'package:escol/modules/aluno/models/materiaModel.dart';
+import 'package:escol/modules/student/models/eventModel/eventModel.dart';
+import 'package:escol/modules/student/models/subjectModel.dart';
 import 'package:escol/modules/firebase/models/firebaseUserModel.dart';
 import 'package:escol/modules/shared/getItRepository.dart';
 import 'package:escol/views/calendar/modal/calendarModalController.dart';
@@ -58,11 +58,11 @@ class _CalendarModalState extends State<CalendarModal> {
               var _date = _controller.selectedDate.add(Duration(
                   hours: _controller.selectedTime.hour,
                   minutes: _controller.selectedTime.minute));
-              EventoModel _evento = EventoModel()
-                ..titulo = _tituloController.text
-                ..descricao = _descricaoController.text
-                ..data = _date
-                ..materia = _controller.dropdown;
+              EventModel _evento = EventModel()
+                ..title = _tituloController.text
+                ..description = _descricaoController.text
+                ..date = _date
+                ..subject = _controller.dropdown;
 
               var _result = await _controller.saveEvento(_user.uid, _evento);
               if (_result.isSuccess) {
@@ -291,13 +291,13 @@ class _CalendarModalState extends State<CalendarModal> {
           _controller.changeDropdown(_newValue);
         },
         items: _controller.materias.value
-            .map<DropdownMenuItem<String>>((MateriaModel value) {
+            .map<DropdownMenuItem<String>>((SubjectModel value) {
           return DropdownMenuItem<String>(
-            value: value.nome,
+            value: value.name,
             child: Container(
                 width: _ac.rW(80),
                 child: Text(
-                  value.nome,
+                  value.name,
                   style: TextStyle(
                       color: neutralDarker,
                       fontWeight: FontWeight.bold,
