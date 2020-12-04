@@ -89,7 +89,6 @@ class _StudentPageState extends State<StudentPage> {
                     children: <Widget>[
                       Container(
                         alignment: Alignment.center,
-                        height: _ac.rH(8),
                         decoration: BoxDecoration(
                           color: neutralLighter,
                           borderRadius: BorderRadius.circular(12),
@@ -101,11 +100,13 @@ class _StudentPageState extends State<StudentPage> {
                           style: TextStyle(color: secondary, fontSize: 15),
                           decoration: InputDecoration(
                               hintText: 'Digite seu email',
-                              hintStyle: TextStyle(fontWeight: FontWeight.bold),
+                              hintStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: neutralMid),
                               border: InputBorder.none,
                               prefixIcon: Icon(
                                 Icons.email_outlined,
-                                color: secondary,
+                                color: neutralMid,
                                 size: 22,
                               )),
                         ),
@@ -115,7 +116,6 @@ class _StudentPageState extends State<StudentPage> {
                       ),
                       Container(
                           alignment: Alignment.center,
-                          height: _ac.rH(8),
                           decoration: BoxDecoration(
                             color: neutralLighter,
                             borderRadius: BorderRadius.circular(12),
@@ -130,12 +130,13 @@ class _StudentPageState extends State<StudentPage> {
                                 obscureText: _controller.isVisibility,
                                 decoration: InputDecoration(
                                     hintText: 'Digite sua senha',
-                                    hintStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    hintStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: neutralMid),
                                     border: InputBorder.none,
                                     prefixIcon: Icon(
                                       Icons.lock_outlined,
-                                      color: secondary,
+                                      color: neutralMid,
                                       size: 22,
                                     ),
                                     suffixIcon: RawMaterialButton(
@@ -152,7 +153,7 @@ class _StudentPageState extends State<StudentPage> {
                                         _controller.isVisibility
                                             ? Icons.visibility_off_outlined
                                             : Icons.visibility_outlined,
-                                        color: secondary,
+                                        color: neutralMid,
                                       ),
                                     )),
                               );

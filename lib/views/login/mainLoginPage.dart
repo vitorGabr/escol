@@ -110,6 +110,8 @@ class _MainLoginPageState extends State<MainLoginPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: RaisedButton(
+                        focusElevation: 0,
+                        highlightElevation: 0,
                         padding: EdgeInsets.zero,
                         shape: RoundedRectangleBorder(
                             borderRadius:
@@ -150,6 +152,8 @@ class _MainLoginPageState extends State<MainLoginPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: RaisedButton(
+                        focusElevation: 0,
+                        highlightElevation: 0,
                         padding: EdgeInsets.zero,
                         shape: RoundedRectangleBorder(
                             borderRadius:

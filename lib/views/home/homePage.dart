@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
               child: TextField(
                 enabled: false,
                 textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(color: secondary, fontSize: 17),
+                style: TextStyle(color: secondary, fontSize: 15),
                 decoration: InputDecoration(
                     hintText: 'Pesquise!',
                     hintStyle: TextStyle(
